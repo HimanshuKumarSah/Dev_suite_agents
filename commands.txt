@@ -1,0 +1,25 @@
+# CrewAI Dev Suite - Commands Reference
+
+### 1. Setup Environment & API Key
+# Copy the example environment file if you haven't already
+cp .env.example .env
+
+# Note: Open .env and replace YOUR_GEMINI_API_KEY with your actual Google API Key.
+
+### 2. Install/Sync Dependencies
+# Ensures all required packages (CrewAI, LangChain, etc.) are installed
+uv sync
+
+### 3. Run the Crew
+# Execute the agents against an SRS PDF document
+# Replace <srs_file_path> with the path to your PDF (e.g., "MyProject_SRS.pdf")
+uv run dev_suite <srs_file_path>
+
+# Example:
+# uv run dev_suite SRS.pdf
+
+### 4. Project Structure
+# src/dev_suite/config/agents.yaml - Define agent personas
+# src/dev_suite/config/tasks.yaml  - Define task workflows
+# src/dev_suite/crew.py            - Main logic and LLM configuration
+# src/dev_suite/main.py            - Entry point for execution

@@ -1,0 +1,49 @@
+srs_parsing_task:
+  description: >
+    Parse the provided SRS documents at {srs_file_path}.
+    Extract all information regarding features, functionalities, user experience, 
+    page layouts, and any other specific requirements mentioned in the document.
+    Identify any tech stack requirements if specified.
+  expected_output: >
+    A comprehensive and structured list of all application requirements, features, 
+    functionalities, and UI/UX details extracted from the SRS document.
+  agent: srs_analyst
+
+app_development_task:
+  description: >
+    Using the requirements and context provided by the SRS Analyst, develop the application.
+    IMPORTANT: Create a new folder named after the project specified in the SRS 
+    (or a logical name like 'GeneratedProject') in the root directory.
+    All source files, images, and configuration must be created INSIDE this new folder.
+    Ensure every specified feature, functionality, and layout is implemented. 
+    Follow any tech stack requirements mentioned. 
+    Once development is complete, create a file named 'startup.txt' INSIDE this project folder 
+    containing all the necessary commands and instructions for the user.
+  expected_output: >
+    A fully developed application folder containing all source code files and a 
+    'startup.txt' file for the user.
+  agent: app_developer
+
+nginx_setup_task:
+  description: >
+    The user needs an Nginx configuration set up to serve a React application in the 
+    current working directory. Use your 'Setup Nginx for React' tool to generate the 
+    necessary configuration files. The server should be configured to run on port 3000.
+  expected_output: >
+    Confirmation that the Nginx configuration was successfully generated, including the command needed to start the server.
+  agent: devops_engineer
+
+qa_validation_task:
+  description: >
+    Analyze the project folder created by the Developer. 
+    Compare the developed application against the requirements provided by the SRS Analyst.
+    Check for:
+    1. All features and functionalities are present.
+    2. No broken internal links or file references.
+    3. No missing assets (images, CSS, JS).
+    4. The project matches the page layouts and tech stack specified.
+    5. 'startup.txt' exists and contains correct run instructions.
+  expected_output: >
+    A final Quality Assurance report confirming the project is ready for use, 
+    or a list of specific issues found that need to be addressed.
+  agent: qa_specialist

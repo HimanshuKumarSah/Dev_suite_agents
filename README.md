@@ -1,54 +1,69 @@
-# DevSuite Crew
+# DevSuite Crew - AI-Driven App Development
 
-Welcome to the DevSuite Crew project, powered by [crewAI](https://crewai.com). This template is designed to help you set up a multi-agent AI system with ease, leveraging the powerful and flexible framework provided by crewAI. Our goal is to enable your agents to collaborate effectively on complex tasks, maximizing their collective intelligence and capabilities.
+DevSuite is a multi-agent system powered by [crewAI](https://crewai.com) designed to autonomously transform Software Requirements Specifications (SRS) into functional applications. It leverages specialized agents for analysis, development, DevOps, and QA.
+
+## Features
+
+- **SRS Analysis:** Automatically parses and extracts requirements from PDF documents.
+- **Full-Stack Development:** Generates backend and frontend code based on requirements.
+- **DevOps Automation:** Configures Nginx for React application deployment.
+- **Automated QA:** Validates the generated project against the original SRS.
+- **Multi-LLM Support:** Choose between local (Ollama) or cloud (OpenAI, Gemini) models.
+- **Parallel Execution:** Run multiple instances with different models or projects simultaneously.
 
 ## Installation
 
-Ensure you have Python >=3.10 <3.14 installed on your system. This project uses [UV](https://docs.astral.sh/uv/) for dependency management and package handling, offering a seamless setup and execution experience.
+This project uses [UV](https://docs.astral.sh/uv/) for high-performance dependency management.
 
-First, if you haven't already, install uv:
+1. **Install UV:**
+   ```bash
+   pip install uv
+   ```
 
-```bash
-pip install uv
-```
+2. **Sync Dependencies:**
+   ```bash
+   uv sync
+   ```
 
-Next, navigate to your project directory and install the dependencies:
+## Configuration
 
-(Optional) Lock the dependencies and install them by using the CLI command:
-```bash
-crewai install
-```
-### Customizing
+1. **Environment Variables:**
+   Create a `.env` file based on `.env.example`:
+   ```bash
+   cp .env.example .env
+   ```
+   Add your API keys if using cloud providers (OpenAI/Gemini).
 
-**Add your `OPENAI_API_KEY` into the `.env` file**
-
-- Modify `src/dev_suite/config/agents.yaml` to define your agents
-- Modify `src/dev_suite/config/tasks.yaml` to define your tasks
-- Modify `src/dev_suite/crew.py` to add your own logic, tools and specific args
-- Modify `src/dev_suite/main.py` to add custom inputs for your agents and tasks
+2. **Local LLM (Ollama):**
+   Ensure Ollama is running locally with your desired model (default: `llama3.1`).
 
 ## Running the Project
 
-To kickstart your crew of AI agents and begin task execution, run this from the root folder of your project:
+Launch the crew by specifying the path to your SRS PDF and an optional LLM choice:
 
 ```bash
-$ crewai run
+# Default (Uses Ollama)
+uv run dev_suite path/to/your_srs.pdf
+
+# Using OpenAI (Requires OPENAI_API_KEY in .env)
+uv run dev_suite path/to/your_srs.pdf openai
+
+# Using Google Gemini (Requires GOOGLE_API_KEY in .env)
+uv run dev_suite path/to/your_srs.pdf gemini
 ```
 
-This command initializes the dev_suite Crew, assembling the agents and assigning them tasks as defined in your configuration.
+### Multi-Instance Usage
+You can run multiple instances in parallel by opening separate terminals. This is ideal for benchmarking different models or processing multiple project pipelines at once.
 
-This example, unmodified, will run the create a `report.md` file with the output of a research on LLMs in the root folder.
+## Project Structure
 
-## Understanding Your Crew
-
-The dev_suite Crew is composed of multiple AI agents, each with unique roles, goals, and tools. These agents collaborate on a series of tasks, defined in `config/tasks.yaml`, leveraging their collective skills to achieve complex objectives. The `config/agents.yaml` file outlines the capabilities and configurations of each agent in your crew.
+- `src/dev_suite/config/`: YAML files defining agent personas and task workflows.
+- `src/dev_suite/tools/`: Custom Python tools for PDF reading and Nginx setup.
+- `src/dev_suite/crew.py`: Core logic for agent orchestration and LLM configuration.
+- `src/dev_suite/main.py`: Entry point for command-line execution and environment loading.
+- `knowledge/`: Local knowledge base files for agent grounding.
 
 ## Support
 
-For support, questions, or feedback regarding the DevSuite Crew or crewAI.
-- Visit our [documentation](https://docs.crewai.com)
-- Reach out to us through our [GitHub repository](https://github.com/joaomdmoura/crewai)
-- [Join our Discord](https://discord.com/invite/X4JWnZnxPb)
-- [Chat with our docs](https://chatg.pt/DWjSBZn)
-
-Let's create wonders together with the power and simplicity of crewAI.
+- Visit [crewAI Documentation](https://docs.crewai.com)
+- Join the [CrewAI's Discord Community](https://discord.com/invite/X4JWnZnxPb)

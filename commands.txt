@@ -12,11 +12,22 @@ uv sync
 
 ### 3. Run the Crew
 # Execute the agents against an SRS PDF document
-# Replace <srs_file_path> with the path to your PDF (e.g., "MyProject_SRS.pdf")
-uv run dev_suite <srs_file_path>
+# Usage: uv run dev_suite <srs_file_path> [llm_choice]
+# Available LLMs: ollama (default), openai, gemini
 
-# Example:
-# uv run dev_suite SRS.pdf
+# Example: Run with local Ollama
+uv run dev_suite SRS.pdf
+
+# Example: Run with OpenAI GPT-4o
+uv run dev_suite SRS.pdf openai
+
+# Example: Run with Google Gemini
+uv run dev_suite SRS.pdf gemini
+
+### 4. Parallel Execution
+# You can run multiple instances of the crew simultaneously using different LLMs:
+# Terminal 1: uv run dev_suite project_a.pdf openai
+# Terminal 2: uv run dev_suite project_b.pdf ollama
 
 ### 4. Project Structure
 # src/dev_suite/config/agents.yaml - Define agent personas

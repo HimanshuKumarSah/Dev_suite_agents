@@ -5,13 +5,6 @@ from dev_suite.tools.pdf_read_tool import PDFReadTool
 from dev_suite.tools.nginx_tool import setup_nginx_for_react
 import os
 
-# Define the local Ollama LLM
-local_llm = LLM(
-    model="ollama/llama3.1",
-    base_url="http://localhost:11434",
-    temperature=0.2
-)
-
 @CrewBase
 class DevSuite():
     """DevSuite crew for parsing SRS, developing applications, and performing QA"""
@@ -19,12 +12,28 @@ class DevSuite():
     agents_config = 'config/agents.yaml'
     tasks_config = 'config/tasks.yaml'
 
+    def __init__(self, llm_choice: str = "ollama"):
+        self.llm = self._get_llm(llm_choice)
+
+    def _get_llm(self, choice: str) -> LLM:
+        if choice == "openai":
+            return LLM(model="openai/gpt-4o")
+        elif choice == "gemini":
+            return LLM(model="google/gemini-2.0-flash")
+        else:
+            # Default to local Ollama
+            return LLM(
+                model=os.getenv("MODEL", "ollama/llama3.1"),
+                base_url=os.getenv("OLLAMA_BASE_URL", "http://localhost:11434"),
+                temperature=0.2
+            )
+
     @agent
     def srs_analyst(self) -> Agent:
         return Agent(
             config=self.agents_config['srs_analyst'],
             tools=[PDFReadTool()],
-            llm=local_llm,
+            llm=self.llm,
             verbose=True,
             allow_delegation=False
         )
@@ -34,7 +43,7 @@ class DevSuite():
         return Agent(
             config=self.agents_config['app_developer'],
             tools=[FileWriterTool(), DirectoryReadTool(), FileReadTool()],
-            llm=local_llm,
+            llm=self.llm,
             verbose=True,
             allow_delegation=False
         )
@@ -44,7 +53,7 @@ class DevSuite():
         return Agent(
             config=self.agents_config['devops_engineer'],
             tools=[setup_nginx_for_react],
-            llm=local_llm,
+            llm=self.llm,
             verbose=True,
             allow_delegation=False
         )
@@ -54,7 +63,7 @@ class DevSuite():
         return Agent(
             config=self.agents_config['qa_specialist'],
             tools=[DirectoryReadTool(), FileReadTool()],
-            llm=local_llm,
+            llm=self.llm,
             verbose=True,
             allow_delegation=False
         )

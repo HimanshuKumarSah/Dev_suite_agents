@@ -637,6 +637,7 @@ dependencies = [
     { name = "crewai", extra = ["tools"] },
     { name = "langchain-google-genai" },
     { name = "pypdf" },
+    { name = "python-dotenv" },
 ]
 
 [package.metadata]
@@ -644,6 +645,7 @@ requires-dist = [
     { name = "crewai", extras = ["tools"], specifier = "==1.14.1" },
     { name = "langchain-google-genai" },
     { name = "pypdf" },
+    { name = "python-dotenv" },
 ]
 
 [[package]]

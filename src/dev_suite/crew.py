@@ -14,6 +14,7 @@ class DevSuite():
 
     def __init__(self, llm_choice: str = "ollama"):
         self.llm = self._get_llm(llm_choice)
+        self.max_rpm = self._get_max_rpm(llm_choice)
 
     def _get_llm(self, choice: str) -> LLM:
         if choice == "openai":
@@ -28,6 +29,14 @@ class DevSuite():
                 temperature=0.2
             )
 
+    def _get_max_rpm(self, choice: str) -> int:
+        """Determines the max requests per minute based on the LLM provider."""
+        if choice == "gemini":
+            return 15  # Recommended for Gemini 1.5 Flash / 2.0 Flash free tier
+        elif choice == "openai":
+            return 50  # Safe default for OpenAI
+        return None    # No limit for local Ollama
+
     @agent
     def srs_analyst(self) -> Agent:
         return Agent(
@@ -41,7 +50,7 @@ class DevSuite():
     @agent
     def app_developer(self) -> Agent:
         return Agent(
-            config=self.agents_config['app_developer'],
+            config=self.agents_config['config']['app_developer'] if isinstance(self.agents_config, dict) and 'config' in self.agents_config else self.agents_config['app_developer'],
             tools=[FileWriterTool(), DirectoryReadTool(), FileReadTool()],
             llm=self.llm,
             verbose=True,
@@ -103,4 +112,5 @@ class DevSuite():
             tasks=self.tasks,
             process=Process.sequential,
             verbose=True,
+            max_rpm=self.max_rpm
         )
